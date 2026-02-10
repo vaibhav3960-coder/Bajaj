@@ -1,19 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from math import gcd
 from functools import reduce
-import requests
 import os
 import google.generativeai as genai
 
+# ---------- Gemini setup ----------
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 app = FastAPI()
 
 EMAIL = "vaibhav3960.beai23@chitkara.edu.in"
-
-
 
 # ---------- Helper functions ----------
 
@@ -30,7 +27,7 @@ def fibonacci(n):
 def is_prime(x):
     if x < 2:
         return False
-    for i in range(2, int(x**0.5)+1):
+    for i in range(2, int(x**0.5) + 1):
         if x % i == 0:
             return False
     return True
@@ -44,7 +41,6 @@ def lcm_list(arr):
 def hcf_list(arr):
     return reduce(gcd, arr)
 
-
 # ---------- APIs ----------
 
 @app.get("/health")
@@ -54,10 +50,8 @@ def health():
         "official_email": EMAIL
     }
 
-
 @app.post("/bfhl")
 def bfhl(payload: dict):
-
     try:
         if "fibonacci" in payload:
             n = int(payload["fibonacci"])
@@ -76,8 +70,7 @@ def bfhl(payload: dict):
         elif "AI" in payload:
             q = payload["AI"]
             response = model.generate_content(q)
-            data = response.text.strip().split()[0]   # single word output
-
+            data = response.text.strip()
 
         else:
             raise HTTPException(status_code=400, detail="Invalid input")
