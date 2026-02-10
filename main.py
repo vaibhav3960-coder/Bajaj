@@ -2,14 +2,17 @@ from fastapi import FastAPI, HTTPException
 from math import gcd
 from functools import reduce
 import requests
+import os
 import google.generativeai as genai
-genai.configure(api_key="AIzaSyA4qVWX5sE8BSch4LYA3HyHn3Ufsuu5tC0")
-model = genai.GenerativeModel("gemini-pro")
 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-pro")
 
 app = FastAPI()
 
 EMAIL = "vaibhav3960.beai23@chitkara.edu.in"
+
 
 
 # ---------- Helper functions ----------
